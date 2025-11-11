@@ -12,6 +12,8 @@ const ChatContainer = () => {
 
   const { authUser } = useAuthStore();
   useEffect(() => {
+    if(!selectedUser?._id) return; 
+
     getMessages(selectedUser._id);
 
     OnWindowMessages();

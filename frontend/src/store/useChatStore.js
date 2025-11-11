@@ -55,7 +55,7 @@ export const useChatStore = create((set, get) => ({
 
     socket.on("newMessage", (newMessage) => {
       set({
-        message: [...get().message, newMessage],
+        messages: [...get().messages, newMessage],
       });
     });
   },
