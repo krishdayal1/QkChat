@@ -1,14 +1,12 @@
 import {create} from "zustand";
-import { axiosInstance } from "../lib/axios.js";
+import { axiosInstance, API_URL } from "../lib/axios.js";
 import toast from "react-hot-toast";
 import { io } from "socket.io-client";
-
-const BASE_URL = "http://localhost:5001";
 
 export const useAuthStore = create((set, get) => ({
     authUser: null,
     isSigningUp : false,
-    isLoggingIng: false,
+    isLoggingIn: false,
     isUpdatingProfile: false,
     isCheckingAuth: true,
     onlineUsers: [],
@@ -53,7 +51,7 @@ export const useAuthStore = create((set, get) => ({
     },
 
     login: async (data) => {
-        set({ isLoggingIng: true});
+        set({ isLoggingIn: true});
         try {
             const res = await axiosInstance.post("/auth/login", data);
             set({ authUser: res.data });
@@ -63,7 +61,7 @@ export const useAuthStore = create((set, get) => ({
         } catch (error) {
             toast.error(error.response.data.message);
         } finally {
-            set({ isLoggingIng: false });
+            set({ isLoggingIn: false });
         }
     },
 
@@ -87,7 +85,7 @@ export const useAuthStore = create((set, get) => ({
         const { authUser } = get();
         if(!authUser || get().socket?.connected) return;
 
-        const socket = io(BASE_URL, {
+        const socket = io(API_URL, {
             query: {
                 userId: authUser._id,
             }

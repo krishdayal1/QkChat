@@ -23,9 +23,9 @@ const PORT = process.env.PORT;
 
 app.use(cookieParser());
 app.use(cors({
-  origin: "http://localhost:5173",
+  origin: process.env.CLIENT_URL || "http://localhost:5173",
   credentials: true
-}))
+}));
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
 app.use(errorHandler);

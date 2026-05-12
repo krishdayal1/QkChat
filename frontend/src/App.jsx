@@ -16,8 +16,6 @@ const App = () => {
   const {authUser, checkAuth, isCheckingAuth, onlineUsers}  = useAuthStore();
   const { theme } = useThemeStore()
 
-  console.log(onlineUsers);
-
   useEffect(() => {
     checkAuth();
   }, [checkAuth]);
@@ -25,9 +23,6 @@ const App = () => {
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
   }, [theme]);
-  
-
-  console.log({ authUser });
 
   if(isCheckingAuth && !authUser) 
     return (
