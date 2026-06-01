@@ -3,6 +3,7 @@ import { axiosInstance, API_URL } from "../lib/axios.js";
 import toast from "react-hot-toast";
 import { io } from "socket.io-client";
 
+
 export const useAuthStore = create((set, get) => ({
     authUser: null,
     isSigningUp : false,
@@ -25,17 +26,44 @@ export const useAuthStore = create((set, get) => ({
         }
     },
 
-    signup: async (data) => {
+    signup: async (data, navigate) => {
         set({ isSigningUp: true});
         try {
             const res = await axiosInstance.post("/auth/signup", data);
-            set({ authUser: res.data });
-            toast.success("Account created successfully");
-            get().connectSocket();
+            toast.success(res.data.message);
+            navigate("/verify-otp", {
+                state: {
+                    email: data.email
+                }
+            });
         } catch (error) {
             toast.error(error.response.data.message);
         } finally {
             set({ isSigningUp: false});
+        }
+    },
+
+    verifyOtp: async (data, navigate) => {
+        try{
+            const res = await axiosInstance.post(
+                "/auth/verify-otp", 
+                data
+            );
+            set({ authUser: res.data });
+            toast.success(res.data.message);
+            get().connectSocket();
+            navigate("/");
+        } catch(error) {
+            toast.error(error.response.data.message);
+        }
+    },
+
+    resendOtp: async (data) => {
+        try {
+            const res = await axiosInstance.post("/auth/resend-otp", data);
+            toast.success(res.data.message);
+        } catch (error) {
+            toast.error(error.response.data.message);
         }
     },
 

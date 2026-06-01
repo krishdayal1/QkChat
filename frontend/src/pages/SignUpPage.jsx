@@ -4,9 +4,10 @@ import { Eye, EyeOff, Mail, MessageSquare, User, Lock, Loader2 } from "lucide-re
 import { Link  } from "react-router-dom";
 import AuthImagePattern from "../components/AuthImagePattern";
 import toast from "react-hot-toast";
-
+import { useNavigate } from "react-router-dom";
 
 const SignUpPage = () => {
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     fullName: "",
@@ -31,7 +32,7 @@ const SignUpPage = () => {
 
     const success = validateForm()
 
-    if(success === true) signup(formData);
+    if(success === true) signup(formData, navigate);
   }
 
   return <div className="min-h-screen grid lg:grid-cols-2">
