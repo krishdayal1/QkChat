@@ -5,6 +5,7 @@ import LoginPage from "./pages/LoginPage";
 import SettingsPage from "./pages/SettingsPage";
 import ProfilePage from "./pages/ProfilePage";
 import VerifyOtpPage from "./pages/VerifyOtpPage";
+import AiButton from "./components/AiButton";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useAuthStore } from "./store/useAuthStore";
 import { useEffect } from "react";
@@ -46,7 +47,6 @@ const App = () => {
         <Route path="/profile" element={authUser ? <ProfilePage /> : <Navigate to="/login" />} />
 
       </Routes>
-
     <Toaster />
     </div>
   )

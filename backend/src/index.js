@@ -6,6 +6,8 @@ import messageRoutes from "./routes/message.route.js";
 
 import cors from "cors";
 
+import aiRoutes from "./routes/ai.route.js"
+
 import { connectDB } from "./lib/db.js";
 
 import dotenv from "dotenv";
@@ -29,6 +31,7 @@ app.use(cors({
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
 app.use(errorHandler);
+app.use("/api/ai", aiRoutes );
 
 server.listen(PORT, () => {
   console.log("server is running on " + PORT);

@@ -1,6 +1,7 @@
 import ChatContainer from "../components/ChatContainer";
 import NoChatSelected from "../components/NoChatSelected";
 import Sidebar from "../components/Sidebar";
+import AiButton from "../components/AiButton";
 import { useChatStore } from "../store/useChatStore";
 
 const HomePage = () => {
@@ -17,6 +18,7 @@ const HomePage = () => {
           </div>
         </div>
       </div>
+      <AiButton />
     </div>
   )
 }
