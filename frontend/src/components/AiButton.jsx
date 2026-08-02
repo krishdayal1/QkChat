@@ -5,9 +5,10 @@ import astra from "../assets/astra.png";
 import ReactMarkdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { useAstraStore } from "../store/useAstraStore";
 
 const AiButton = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const { isAstraOpen, openAstra, closeAstra } = useAstraStore();
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -55,8 +56,11 @@ const AiButton = () => {
 
   return (
     <div className="fixed bottom-12 right-4">
-      <button onClick={() => setIsOpen(true)}>🐰</button>
-      {isOpen && (
+      <button onClick={openAstra}><img
+          src={astra}
+          alt="Open Astra"
+          className="w-14 h-14 rounded-full object-cover animate-pulse"/></button>
+      {isAstraOpen && (
         <div className="card w-[95vw] max-w-[420px] h-[85vh] max-h-[700px] bg-base-100 shadow-2xl overflow-hidden">
           {/* Header area */}
           <div className="card-body flex flex-col min-h-0 p-4">
@@ -76,7 +80,7 @@ const AiButton = () => {
                 </div>
               </div>
 
-              <button onClick={() => setIsOpen(false)}>X</button>
+              <button onClick={closeAstra}>X</button>
             </div>
 
             {/* // chat area */}
@@ -122,19 +126,21 @@ const AiButton = () => {
 
                           return match ? (
                             <SyntaxHighlighter
-                            language={match[1]}
-                            style={vscDarkPlus}
-                            PreTag="div"
-                            customStyle={{
-                              margin: 0,
-                              padding: "10px",
-                            }}
-                            {...props}
+                              language={match[1]}
+                              style={vscDarkPlus}
+                              PreTag="div"
+                              customStyle={{
+                                margin: 0,
+                                padding: "10px",
+                              }}
+                              {...props}
                             >
                               {String(children).replace(/\n$/, "")}
                             </SyntaxHighlighter>
                           ) : (
-                            <code className={className} {...props}>{children}</code>
+                            <code className={className} {...props}>
+                              {children}
+                            </code>
                           );
                         },
                         pre: ({ children }) => (
