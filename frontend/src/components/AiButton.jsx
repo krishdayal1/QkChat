@@ -73,9 +73,9 @@ const AiButton = () => {
                   <img
                     src={astra}
                     alt="Astra"
-                    className="w-10 h-12 rounded-full object-cover"
+                    className="w-10 h-10 rounded-full object-cover"
                   />
-                  <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-base-100 rounded-full"></span>
+                  <span className="absolute bottom-1 right-0 w-3 h-3 bg-green-500 border-2 border-base-100 rounded-full"></span>
                 </div>
                 <div>
                   <h2 className="font-bold">Astra</h2>

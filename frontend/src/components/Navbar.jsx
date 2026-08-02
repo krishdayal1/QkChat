@@ -34,7 +34,7 @@ const Navbar = () => {
               <img
                 src={astra}
                 alt="Astra"
-                className="w-6 h-6 rounded-full object-cover"
+                className="w-9 h-9 rounded-full object-cover"
               />
 
               <span className='hidden sm:inline'>
