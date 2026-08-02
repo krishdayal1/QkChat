@@ -56,13 +56,8 @@ const AiButton = () => {
 
   return (
     <div className="fixed bottom-12 right-4">
-      <button onClick={openAstra}><img
-          src={astra}
-          alt="Open Astra"
-          className="w-14 h-14 rounded-full object-cover animate-pulse"/></button>
       {isAstraOpen && (
         <div className="card w-[95vw] max-w-[420px] h-[85vh] max-h-[700px] bg-base-100 shadow-2xl overflow-hidden">
-          {/* Header area */}
           <div className="card-body flex flex-col min-h-0 p-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
@@ -83,7 +78,6 @@ const AiButton = () => {
               <button onClick={closeAstra}>X</button>
             </div>
 
-            {/* // chat area */}
             <div className="flex-1 min-h-0 overflow-y-auto space-y-2">
               {messages.map((msg, index) => (
                 <div

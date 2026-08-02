@@ -2,9 +2,12 @@ import { LogOut, MessageSquare, Settings, User } from 'lucide-react'
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { useAuthStore } from "../store/useAuthStore";
+import astra from "../assets/astra.png";
+import { useAstraStore } from '../store/useAstraStore';
 
 const Navbar = () => {
   const { logout, authUser } = useAuthStore();
+  const { openAstra } = useAstraStore();
 
   return (
     <header
@@ -23,6 +26,20 @@ const Navbar = () => {
           </div>
           
           <div className="flex items-center gap-2">
+            <button
+              onClick={openAstra}
+              className="btn btn-sm gap-2"
+              >
+              <img
+                src={astra}
+                alt="Astra"
+                className="w-6 h-6 rounded-full object-cover"
+              />
+
+              <span className='hidden sm:inline'>
+                Astra
+              </span>
+            </button>
             <Link
               to={"/settings"}
               className={`btn btn-sm transition-colors`}
