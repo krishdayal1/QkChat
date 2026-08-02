@@ -6,6 +6,8 @@ import ReactMarkdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { useAstraStore } from "../store/useAstraStore";
+import { X } from "lucide-react";
+import { motion } from "framer-motion";
 
 const AiButton = () => {
   const { isAstraOpen, openAstra, closeAstra } = useAstraStore();
@@ -57,16 +59,24 @@ const AiButton = () => {
   return (
     <div className="fixed bottom-12 right-4">
       {isAstraOpen && (
-        <div className="card w-[95vw] max-w-[420px] h-[85vh] max-h-[700px] bg-base-100 shadow-2xl overflow-hidden">
+        <motion.div
+          initial={{ opacity: 0, y: 20, scale: 0.98 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: 20, scale: 0.98 }}
+          transition={{ duration: 0.25 }}
+          className="card w-[95vw] max-w-[420px] h-[85vh] max-h-[700px] bg-base-100 shadow-2xl overflow-hidden animate-in slide-in-from-bottom-5 fade-in duration-300"
+        >
           <div className="card-body flex flex-col min-h-0 p-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <img
-                  src={astra}
-                  alt="Astra"
-                  className="w-10 h-12 rounded-full"
-                />
-
+                <div className="relative">
+                  <img
+                    src={astra}
+                    alt="Astra"
+                    className="w-10 h-12 rounded-full object-cover"
+                  />
+                  <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-base-100 rounded-full"></span>
+                </div>
                 <div>
                   <h2 className="font-bold">Astra</h2>
                   <p className="text-xs opacity-70">
@@ -75,16 +85,32 @@ const AiButton = () => {
                 </div>
               </div>
 
-              <button onClick={closeAstra}>X</button>
+              <button
+                onClick={closeAstra}
+                className="btn btn-ghost btn-circle btn-sm"
+              >
+                <X className="w-5 h-5" />
+              </button>
             </div>
 
             <div className="flex-1 min-h-0 overflow-y-auto space-y-2">
               {messages.map((msg, index) => (
-                <div
+                <motion.div
                   key={index}
-                  className={
-                    msg.sender === "user" ? "chat chat-end" : "chat chat-start"
-                  }
+                  initial={{
+                    opacity: 0,
+                    x: msg.sender === "user" ? 30 : -30,
+                    y: 10,
+                  }}
+                  animate={{
+                    opacity: 1,
+                    x: 0,
+                    y: 0,
+                  }}
+                  transition={{
+                    duration: 0.25,
+                  }}
+                  className={msg.sender === "user" ? "chat chat-end" : "chat chat-start"}
                 >
                   {msg.sender === "ai" && (
                     <div className="chat-image avatar">
@@ -147,7 +173,7 @@ const AiButton = () => {
                       {msg.text}
                     </ReactMarkdown>
                   </div>
-                </div>
+                </motion.div>
               ))}
               {/* Thinking indicator for my chat ..... */}
               {isLoading && (
@@ -188,7 +214,7 @@ const AiButton = () => {
               </button>
             </div>
           </div>
-        </div>
+        </motion.div>
       )}
     </div>
   );

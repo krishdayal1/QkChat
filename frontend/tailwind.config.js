@@ -1,5 +1,5 @@
 import daisyui from 'daisyui'
-
+import animate from 'tailwindcss-animate'
 
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -20,7 +20,7 @@ export default {
       },
     },
   },
-  plugins: [daisyui],
+  plugins: [daisyui, animate],
   daisyui: {
     themes: [
       "light",
@@ -55,6 +55,6 @@ export default {
       "dim",
       "nord",
       "sunset",
-    ]
-  }
+    ],
+  },
 }

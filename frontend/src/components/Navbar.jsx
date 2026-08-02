@@ -7,7 +7,7 @@ import { useAstraStore } from '../store/useAstraStore';
 
 const Navbar = () => {
   const { logout, authUser } = useAuthStore();
-  const { openAstra } = useAstraStore();
+  const { openAstra, isAstraOpen } = useAstraStore();
 
   return (
     <header
@@ -28,6 +28,7 @@ const Navbar = () => {
           <div className="flex items-center gap-2">
             <button
               onClick={openAstra}
+              disabled={isAstraOpen}
               className="btn btn-sm gap-2"
               >
               <img
