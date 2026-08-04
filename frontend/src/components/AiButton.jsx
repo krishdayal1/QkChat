@@ -30,6 +30,18 @@ const AiButton = () => {
     if (!message.trim()) {
       return toast.error("Please type your question");
     }
+    const updatedMessages = [
+      ...messages,
+      {
+        sender: "user",
+        text: message,
+      },
+    ];
+    setMessages(updatedMessages);
+    const res = await axiosInstance.post("/ai", {
+      message,
+      history: updatedMessages.slice(-10),
+    });
     setMessages((prev) => [
       ...prev,
       {
@@ -40,7 +52,10 @@ const AiButton = () => {
     setIsLoading(true);
 
     try {
-      const res = await axiosInstance.post("/ai", { message });
+      const res = await axiosInstance.post("/ai", {
+        message,
+        history: message.slice(-10),
+      });
       setMessages((prev) => [
         ...prev,
         {
@@ -110,7 +125,9 @@ const AiButton = () => {
                   transition={{
                     duration: 0.25,
                   }}
-                  className={msg.sender === "user" ? "chat chat-end" : "chat chat-start"}
+                  className={
+                    msg.sender === "user" ? "chat chat-end" : "chat chat-start"
+                  }
                 >
                   {msg.sender === "ai" && (
                     <div className="chat-image avatar">

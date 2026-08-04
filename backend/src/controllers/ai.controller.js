@@ -1,16 +1,26 @@
+import { text } from "express";
 import gemini from "../lib/gemini.js";
 
 export const chatWithAi = async (req,res) => {
     try {
-        const { message } = req.body;
+        const { message, history = [] } = req.body;
         if(!message) {
             return res.status(400).json({message: "Message is required"});
         }
-        console.log(message);
+
+        const contents = history.map((msg) => ({
+            role: msg.sender === "user" ? "user" : "model",
+            parts: [{ text: msg.text }]
+        }));
+
+        contents.push({
+            role: "user",
+            parts: [{ text: message }],
+        })
 
         const result = await gemini.models.generateContent({
             model: "gemini-2.5-flash",
-            contents: message
+            contents,
         })
 
         const reply = result?.candidates?.[0]?.content?.parts?.[0]?.text;
