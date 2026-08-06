@@ -37,38 +37,31 @@ const AiButton = () => {
         text: message,
       },
     ];
+
     setMessages(updatedMessages);
-    const res = await axiosInstance.post("/ai", {
-      message,
-      history: updatedMessages.slice(-10),
-    });
-    setMessages((prev) => [
-      ...prev,
-      {
-        sender: "user",
-        text: message,
-      },
-    ]);
     setIsLoading(true);
 
     try {
-      const res = await axiosInstance.post("/ai", {
+      const response = await axiosInstance.post("/ai", {
         message,
-        history: message.slice(-10),
+        history: updatedMessages.slice(-20),
       });
-      setMessages((prev) => [
-        ...prev,
+
+      setMessages([
+        ...updatedMessages,
         {
           sender: "ai",
-          text: res.data.reply,
+          text: response.data.reply,
         },
       ]);
     } catch (error) {
-      toast.error("Failed to get AI response");
+      console.error(error);
+
+      toast.error(error.response?.data?.message || "Failed to get AI response");
     } finally {
       setIsLoading(false);
+      setMessage("");
     }
-    setMessage("");
   };
 
   return (

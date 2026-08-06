@@ -1,4 +1,3 @@
-import { text } from "express";
 import gemini from "../lib/gemini.js";
 
 export const chatWithAi = async (req,res) => {
