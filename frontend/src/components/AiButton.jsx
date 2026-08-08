@@ -65,16 +65,16 @@ const AiButton = () => {
   };
 
   return (
-    <div className="fixed bottom-12 right-4">
+    <>
       {isAstraOpen && (
         <motion.div
           initial={{ opacity: 0, y: 20, scale: 0.98 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 20, scale: 0.98 }}
           transition={{ duration: 0.25 }}
-          className="card w-[95vw] max-w-[420px] h-[85vh] max-h-[700px] bg-base-100 shadow-2xl overflow-hidden animate-in slide-in-from-bottom-5 fade-in duration-300"
+          className="absolute top-0 bottom-0 left-0 right-0 sm:left-80 z-50 bg-base-100 overflow-hidden rounded-2xl flex flex-col shadow-2xl"
         >
-          <div className="card-body flex flex-col min-h-0 p-4">
+          <div className="flex flex-col h-full p-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="relative">
@@ -226,7 +226,7 @@ const AiButton = () => {
           </div>
         </motion.div>
       )}
-    </div>
+    </>
   );
 };
 
