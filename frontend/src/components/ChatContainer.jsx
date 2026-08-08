@@ -1,5 +1,5 @@
 import { useChatStore } from "../store/useChatStore";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import ChatHeader from "../components/ChatHeader";
 import MessageInput from "../components/MessageInput";
 import MessageSkeleton from "./skeletons/MessageSkeleton";
@@ -10,6 +10,7 @@ const ChatContainer = () => {
   const { messages, getMessages, isMessagesLOading, selectedUser, OnWindowMessages, OffWindowMessages } =
     useChatStore();
 
+    const messageEndRef = useRef(null);
   const { authUser } = useAuthStore();
   useEffect(() => {
     if(!selectedUser?._id) return; 
@@ -20,6 +21,12 @@ const ChatContainer = () => {
 
     return () => OffWindowMessages();
   }, [selectedUser._id, getMessages, OnWindowMessages, OffWindowMessages]);
+
+  useEffect(() => {
+    messageEndRef.current?.scrollIntoView({
+      behavior: messages.length > 1 ? "smooth" : "auto",
+    });
+  }, [messages]);
 
   if (isMessagesLOading)
     return (
@@ -71,6 +78,8 @@ const ChatContainer = () => {
             </div>
           </div>
         ))}
+
+        <div ref={messageEndRef} />
       </div>
 
       <MessageInput />
