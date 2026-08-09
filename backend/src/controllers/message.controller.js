@@ -3,7 +3,7 @@ import User from "../models/user.model.js";
 import Message from "../models/message.model.js";
 
 import cloudinary from "cloudinary";
-import { getRecieverSocketId, io } from "../lib/socket.js";
+import { getReceieverSocketId, io } from "../lib/socket.js";
 
 export const getUsersForSidebar = async (req,res) => {
     try {
@@ -60,10 +60,10 @@ export const sendMessage = async (req, res) => {
 
         // todo: socket.io
 
-        const recieverSocketId = getRecieverSocketId(receiverId);
+        const receieverSocketId = getReceieverSocketId(receiverId);
 
-        if(recieverSocketId){
-            io.to(recieverSocketId).emit("newMessage", newMessage);
+        if(receieverSocketId){
+            io.to(receieverSocketId).emit("newMessage", newMessage);
         }
 
 

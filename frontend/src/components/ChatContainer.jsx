@@ -7,13 +7,20 @@ import { useAuthStore } from "../store/useAuthStore";
 import { formatMessageTime } from "../lib/utils";
 
 const ChatContainer = () => {
-  const { messages, getMessages, isMessagesLOading, selectedUser, OnWindowMessages, OffWindowMessages } =
-    useChatStore();
+  const {
+    messages,
+    getMessages,
+    isMessagesLOading,
+    selectedUser,
+    OnWindowMessages,
+    OffWindowMessages,
+    isTyping,
+  } = useChatStore();
 
-    const messageEndRef = useRef(null);
+  const messageEndRef = useRef(null);
   const { authUser } = useAuthStore();
   useEffect(() => {
-    if(!selectedUser?._id) return; 
+    if (!selectedUser?._id) return;
 
     getMessages(selectedUser._id);
 
@@ -82,6 +89,15 @@ const ChatContainer = () => {
         <div ref={messageEndRef} />
       </div>
 
+      {isTyping && (
+        <div className="px-4 pb-2">
+          <div className="chat chat-start">
+            <div className="chat-bubble bg-base-200">
+              <span className="loading loading-dots loading-sm"></span>
+            </div>
+          </div>
+        </div>
+      )}
       <MessageInput />
     </div>
   );

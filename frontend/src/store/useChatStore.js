@@ -9,6 +9,7 @@ export const useChatStore = create((set, get) => ({
   selectedUser: null,
   isUsersLoading: false,
   isMessagesLoading: false,
+  isTyping: false,
 
   getUsers: async () => {
     set({ isUsersLoading: true });
@@ -47,6 +48,28 @@ export const useChatStore = create((set, get) => ({
     }
   },
 
+  startTyping: () => {
+    const socket = useAuthStore.getState().socket;
+    const { selectedUser } = get();
+
+    if( socket && selectedUser ) {
+      socket.emit("typing", {
+        receiverId: selectedUser._id,
+      });
+    }
+  },
+
+  stopTyping: () => {
+    const socket = useAuthStore.getState().socket;
+    const { selectedUser } = get();
+
+    if(socket && selectedUser) {
+      socket.emit("stopTyping", {
+        receiverId: selectedUser._id,
+      });
+    }
+  },
+
   OnWindowMessages: () => {
     const {selectedUser} = get();
     if(!selectedUser) return;
@@ -58,11 +81,29 @@ export const useChatStore = create((set, get) => ({
         messages: [...get().messages, newMessage],
       });
     });
+
+    socket.on("userTyping", ({ userId }) => {
+      const selected = get().selectedUser;
+
+      if(selected?._id === userId) {
+        set({ isTyping: true });
+      }
+    });
+
+    socket.on("userStopTyping", ({ userId }) => {
+      const selected = get().selectedUser;
+
+      if(selected?._id === userId) {
+        set({ isTyping: false });
+      }
+    })
   },
 
   OffWindowMessages: () => {
     const socket = useAuthStore.getState().socket;
     socket.off("newMessage");
+    socket.off("userTyping");
+    socket.off("userStopTyping");
   },
   // todo: optimize later
   setSelectedUser: (selectedUser) => set({ selectedUser }),

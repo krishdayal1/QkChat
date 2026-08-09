@@ -11,7 +11,7 @@ const io = new Server(server, {
     },
 });
 
-export function getRecieverSocketId(userId) {
+export function getReceieverSocketId(userId) {
     return userSocketMap[userId];
 }
 
@@ -20,10 +20,35 @@ const userSocketMap = {}; // userId = socketId
 io.on("connection", (socket) => {
     console.log("A user connected :", socket.id);
 
-    const userId = socket.handshake.query.userId
-    if(userId) userSocketMap[userId] = socket.id
+    const userId = socket.handshake.query.userId;
 
+    if(userId) {
+        socket.userId = userId;
+        userSocketMap[userId] = socket.id;
+    }
     io.emit("getOnlineUsers", Object.keys(userSocketMap));
+
+    socket.on("typing", ({ receiverId }) => {
+        console.log("Typing Event:", socket.userId, "->", receiverId);
+        const receiverSocketId = getReceieverSocketId(receiverId);
+
+        if(receiverSocketId){
+            io.to(receiverSocketId).emit("userTyping", {
+                userId: socket.userId,
+            });
+        }
+    });
+
+    socket.on("stopTyping", ({ receiverId }) => {
+        console.log("Stop Typing:", socket.userId, "->", receiverId);
+        const receiverSocketId = getReceieverSocketId(receiverId);
+
+        if(receiverSocketId) {
+            io.to(receiverSocketId).emit("userStopTyping", {
+                userId: socket.userId,
+            });
+        }
+    });
 
     socket.on("disconnect", () => {
         console.log("A user disconnected", socket.id);

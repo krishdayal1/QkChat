@@ -7,7 +7,8 @@ const MessageInput = () => {
   const [text, setText] = useState("");
   const [imagePreview, setImagePreview] = useState(null);
   const fileInputRef = useRef(null);
-  const { sendMessage } = useChatStore();
+  const typingTimeoutRef = useRef(null);
+  const { sendMessage, startTyping, stopTyping } = useChatStore();
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -33,6 +34,9 @@ const MessageInput = () => {
     if (!text.trim() && !imagePreview) return;
 
     try {
+      stopTyping();
+      clearTimeout(typingTimeoutRef.current);
+
       await sendMessage({
         text: text.trim(),
         image: imagePreview,
@@ -76,7 +80,18 @@ const MessageInput = () => {
             className="flex-1 min-w-0 w-full input input-bordered rounded-lg input-sm sm:input-md"
             placeholder="Type a message..."
             value={text}
-            onChange={(e) => setText(e.target.value)}
+            onChange={(e) => {
+              setText(e.target.value)
+              console.log("typing emitted");
+              startTyping();
+
+              clearTimeout(typingTimeoutRef.current);
+
+              typingTimeoutRef.current = setTimeout(() => {
+                stopTyping();
+              }, 1000);
+            }
+          }
           />
           <input
             type="file"
