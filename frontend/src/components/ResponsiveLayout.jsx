@@ -11,15 +11,19 @@ const ResponsiveLayout = () => {
     <div className="flex h-full relative">
       {/* Sidebar */}
       <div
-        className={
+        className={`${
+          selectedUser ? "hidden md:flex" : "flex"}
           "w-24 sm:w-28 md:w-80 border-r border-base-300 flex-shrink-0"
-        }
+        `}
       >
         <Sidebar />
       </div>
 
       {/* Chat area */}
-      <div className="flex-1 relative flex min-w-0">
+      <div className={`${
+        selectedUser ? "flex w-full" : "flex flex-1"
+      } relative min-w-0`}
+      >
         {selectedUser ? <ChatContainer /> : <NoChatSelected />}
       </div>
 

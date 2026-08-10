@@ -29,7 +29,6 @@ io.on("connection", (socket) => {
     io.emit("getOnlineUsers", Object.keys(userSocketMap));
 
     socket.on("typing", ({ receiverId }) => {
-        console.log("Typing Event:", socket.userId, "->", receiverId);
         const receiverSocketId = getReceieverSocketId(receiverId);
 
         if(receiverSocketId){
@@ -40,7 +39,6 @@ io.on("connection", (socket) => {
     });
 
     socket.on("stopTyping", ({ receiverId }) => {
-        console.log("Stop Typing:", socket.userId, "->", receiverId);
         const receiverSocketId = getReceieverSocketId(receiverId);
 
         if(receiverSocketId) {

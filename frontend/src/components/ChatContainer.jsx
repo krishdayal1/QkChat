@@ -90,12 +90,23 @@ const ChatContainer = () => {
       </div>
 
       {isTyping && (
-        <div className="px-4 pb-2">
-          <div className="chat chat-start">
-            <div className="chat-bubble bg-base-200">
-              <span className="loading loading-dots loading-sm"></span>
-            </div>
-          </div>
+        <div className="px-3 pb-1">
+          {" "}
+          <div className="flex items-center gap-2">
+            {" "}
+            <div className="w-6 h-6 rounded-full overflow-hidden border border-base-300">
+              {" "}
+              <img
+                src={selectedUser.profilePic || "/avatar.png"}
+                alt={selectedUser.fullName}
+                className="w-full h-full object-cover"
+              />{" "}
+            </div>{" "}
+            <div className="bg-base-200 rounded-full px-3 py-1">
+              {" "}
+              <span className="loading loading-dots loading-xs text-base-content/70"></span>{" "}
+            </div>{" "}
+          </div>{" "}
         </div>
       )}
       <MessageInput />
