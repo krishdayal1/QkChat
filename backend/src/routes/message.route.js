@@ -1,10 +1,12 @@
 import express from "express";
-import { getMessages, getUsersForSidebar, sendMessage } from "../controllers/message.controller.js";
+import { getMessages, getUsersForSidebar, markMessagesAsSeen, sendMessage } from "../controllers/message.controller.js";
 import { protectRoute } from "../middleware/auth.middleware.js";
 
 const router = express.Router();
 
 router.get("/users", protectRoute, getUsersForSidebar);
+
+router.put("/seen/:id", protectRoute, markMessagesAsSeen);
 
 router.get("/:id", protectRoute, getMessages);
 

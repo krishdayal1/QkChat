@@ -15,6 +15,7 @@ const ChatContainer = () => {
     OnWindowMessages,
     OffWindowMessages,
     isTyping,
+    markMessagesAsSeen,
   } = useChatStore();
 
   const messageEndRef = useRef(null);
@@ -24,10 +25,12 @@ const ChatContainer = () => {
 
     getMessages(selectedUser._id);
 
+    markMessagesAsSeen(selectedUser._id);
+
     OnWindowMessages();
 
     return () => OffWindowMessages();
-  }, [selectedUser._id, getMessages, OnWindowMessages, OffWindowMessages]);
+  }, [selectedUser._id, getMessages, OnWindowMessages, OffWindowMessages, markMessagesAsSeen]);
 
   useEffect(() => {
     messageEndRef.current?.scrollIntoView({
@@ -75,7 +78,14 @@ const ChatContainer = () => {
 
               {message.senderId === authUser._id && (
                 <span className="text-[11px] text-base-content/50 leading-none translate-y-[1px]">
-                  {message.delivered ? "✓✓" : "✓"}{" "}
+                  {message.seen ? (
+                    <span className="text-blue-400">✓✓</span>
+                  ) : message.delivered ? (
+                    <span>✓✓</span>
+                  ) : (
+                    <span>✓</span>
+                  )
+                  }
                 </span>
               )}
             </div>

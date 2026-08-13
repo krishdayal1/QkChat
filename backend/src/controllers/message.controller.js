@@ -18,6 +18,37 @@ export const getUsersForSidebar = async (req,res) => {
     }
 };
 
+export const markMessagesAsSeen = async (req, res) => {
+    try {
+        const { id: userId } = req.params;
+        const myId = req.user._id;
+
+        await Message.updateMany(
+            {
+                senderId: userId,
+                receiverId: myId,
+                seen: false,
+            },
+            {
+                seen: true,
+            }
+        );
+
+        const senderSocketId = getReceiverSocketId(userId);
+
+        if(senderSocketId) {
+            io.to(senderSocketId).emit("messagesSeen", {
+                userId: myId,
+            });
+        }
+
+        res.status(200).json({ success: true });
+    } catch (error) {
+        console.log("Error in markMessageAsSeen", error.message);
+        res.status(500).json({ error: "Internal server Error" });
+    }
+};
+
 export const getMessages = async (req,res) => {
     try {
         const userTochat = req.params.id.trim();
