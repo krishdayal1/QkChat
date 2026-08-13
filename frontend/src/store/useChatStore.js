@@ -40,7 +40,7 @@ export const useChatStore = create((set, get) => ({
     try {
       const res = await axiosInstance.post(
         `/messages/send/${selectedUser._id}`,
-        messageData
+        messageData,
       );
       set({ messages: [...messages, res.data] });
     } catch (error) {
@@ -52,7 +52,7 @@ export const useChatStore = create((set, get) => ({
     const socket = useAuthStore.getState().socket;
     const { selectedUser } = get();
 
-    if( socket && selectedUser ) {
+    if (socket && selectedUser) {
       socket.emit("typing", {
         receiverId: selectedUser._id,
       });
@@ -63,7 +63,7 @@ export const useChatStore = create((set, get) => ({
     const socket = useAuthStore.getState().socket;
     const { selectedUser } = get();
 
-    if(socket && selectedUser) {
+    if (socket && selectedUser) {
       socket.emit("stopTyping", {
         receiverId: selectedUser._id,
       });
@@ -71,21 +71,34 @@ export const useChatStore = create((set, get) => ({
   },
 
   OnWindowMessages: () => {
-    const {selectedUser} = get();
-    if(!selectedUser) return;
+    const { selectedUser } = get();
+    if (!selectedUser) return;
 
     const socket = useAuthStore.getState().socket;
 
+    socket.off("newMessage");
+    socket.off("messageDelivered");
+    socket.off("userTyping");
+    socket.off("userStopTyping");
+    
     socket.on("newMessage", (newMessage) => {
       set({
         messages: [...get().messages, newMessage],
       });
     });
 
+    socket.on("messageDelivered", ({ messageId }) => {
+      set({
+        messages: get().messages.map((msg) =>
+          msg._id === messageId ? { ...msg, delivered: true } : msg,
+        ),
+      });
+    });
+
     socket.on("userTyping", ({ userId }) => {
       const selected = get().selectedUser;
 
-      if(selected?._id === userId) {
+      if (selected?._id === userId) {
         set({ isTyping: true });
       }
     });
@@ -93,10 +106,10 @@ export const useChatStore = create((set, get) => ({
     socket.on("userStopTyping", ({ userId }) => {
       const selected = get().selectedUser;
 
-      if(selected?._id === userId) {
+      if (selected?._id === userId) {
         set({ isTyping: false });
       }
-    })
+    });
   },
 
   OffWindowMessages: () => {
@@ -104,6 +117,7 @@ export const useChatStore = create((set, get) => ({
     socket.off("newMessage");
     socket.off("userTyping");
     socket.off("userStopTyping");
+    socket.off("messageDelivered");
   },
   // todo: optimize later
   setSelectedUser: (selectedUser) => set({ selectedUser }),

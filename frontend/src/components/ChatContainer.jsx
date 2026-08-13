@@ -68,10 +68,16 @@ const ChatContainer = () => {
                 />
               </div>
             </div>
-            <div className="chat-header mb-1">
-              <time className="text-xs opacity-50 ml-1">
+            <div className="chat-header mb-1 flex items-center gap-1.5 justify-end">
+              <time className="text-xs opacity-50">
                 {formatMessageTime(message.createdAt)}
               </time>
+
+              {message.senderId === authUser._id && (
+                <span className="text-[11px] text-base-content/50 leading-none translate-y-[1px]">
+                  {message.delivered ? "✓✓" : "✓"}{" "}
+                </span>
+              )}
             </div>
             <div className="chat-bubble flex flex-col">
               {message.image && (

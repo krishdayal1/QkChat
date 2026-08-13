@@ -3,7 +3,8 @@ import User from "../models/user.model.js";
 import Message from "../models/message.model.js";
 
 import cloudinary from "cloudinary";
-import { getReceieverSocketId, io } from "../lib/socket.js";
+import { getReceiverSocketId, io } from "../lib/socket.js";
+import { send } from "process";
 
 export const getUsersForSidebar = async (req,res) => {
     try {
@@ -49,24 +50,29 @@ export const sendMessage = async (req, res) => {
             imageUrl = uploadResponse.secure_url;
         }
 
+        const receiverSocketId = getReceiverSocketId(cleanedReceiverId);
+
         const newMessage = new Message({
             senderId,
             receiverId: cleanedReceiverId,
             text,
-            image: imageUrl
+            image: imageUrl,
+            delivered: !!receiverSocketId,
         });
 
         await newMessage.save();
 
-        // todo: socket.io
-
-        const receieverSocketId = getReceieverSocketId(receiverId);
-
-        if(receieverSocketId){
-            io.to(receieverSocketId).emit("newMessage", newMessage);
+        if(receiverSocketId){
+            io.to(receiverSocketId).emit("newMessage", newMessage);
         }
 
+        const senderSocketId = getReceiverSocketId(senderId.toString());
 
+        if(receiverSocketId && senderSocketId) {
+            io.to(senderSocketId).emit("messageDelivered", {
+                messageId: newMessage._id,
+            });
+        }
         
         res.status(201).json(newMessage);
     } catch (error) {

@@ -11,7 +11,7 @@ const io = new Server(server, {
     },
 });
 
-export function getReceieverSocketId(userId) {
+export function getReceiverSocketId(userId) {
     return userSocketMap[userId];
 }
 
@@ -29,7 +29,7 @@ io.on("connection", (socket) => {
     io.emit("getOnlineUsers", Object.keys(userSocketMap));
 
     socket.on("typing", ({ receiverId }) => {
-        const receiverSocketId = getReceieverSocketId(receiverId);
+        const receiverSocketId = getReceiverSocketId(receiverId);
 
         if(receiverSocketId){
             io.to(receiverSocketId).emit("userTyping", {
@@ -39,7 +39,7 @@ io.on("connection", (socket) => {
     });
 
     socket.on("stopTyping", ({ receiverId }) => {
-        const receiverSocketId = getReceieverSocketId(receiverId);
+        const receiverSocketId = getReceiverSocketId(receiverId);
 
         if(receiverSocketId) {
             io.to(receiverSocketId).emit("userStopTyping", {
