@@ -6,7 +6,10 @@ import {
     signup, 
     updateProfile, 
     verifyOtp,
-    resendOtp
+    resendOtp,
+    forgotPassword,
+    verifyResetOtp,
+    resetPassword,
 } from "../controllers/auth.controller.js";
 import { protectRoute } from "../middleware/auth.middleware.js";
 import { 
@@ -23,7 +26,8 @@ router.post("/logout", logout);
 router.post("/verify-otp", verifyOtp);
 router.post("/resend-otp", resendOtp);
 router.put("/update-profile", protectRoute, validateUpdateProfile, updateProfile);
-
+router.post("/forgot-password", forgotPassword);
 router.get("/check", protectRoute, checkAuth);
-
+router.post("/verify-reset-otp", verifyResetOtp);
+router.post("/reset-password", resetPassword);
 export default router;

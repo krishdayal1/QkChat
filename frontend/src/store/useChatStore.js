@@ -109,7 +109,7 @@ export const useChatStore = create((set, get) => ({
 
           set({
             messages: get().messages.map((msg) =>
-              msg.senderId === newMessage.senderId && msg.receiverId === useAuthStore.getState().authUser._id
+              msg.senderId === newMessage.senderId && msg.receiverId === useAuthStore.getState().authUser._id 
                 ? { ...msg, seen: true }
                 : msg,
             ),
