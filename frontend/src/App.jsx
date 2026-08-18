@@ -14,9 +14,10 @@ import { Toaster } from "react-hot-toast";
 import { useThemeStore } from "./store/useThemeStore";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import VerifyResetOtpPage from "./pages/verifyResetOtpPage";
+import ResetPasswordPage from "./pages/ResetPasswordPage";
 
 const App = () => {
-  const { authUser, checkAuth, isCheckingAuth, onlineUsers } = useAuthStore();
+  const { authUser, checkAuth, isCheckingAuth } = useAuthStore();
   const { theme } = useThemeStore();
 
   useEffect(() => {
@@ -58,6 +59,10 @@ const App = () => {
         <Route
           path="/forgot-password"
           element={!authUser ? <ForgotPasswordPage /> : <Navigate to="/" />}
+        />
+        <Route
+          path="/reset-password"
+          element={!authUser ? <ResetPasswordPage /> : <Navigate to="/" />}
         />
         <Route path="/settings" element={<SettingsPage />} />
         <Route
