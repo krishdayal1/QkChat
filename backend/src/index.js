@@ -2,6 +2,8 @@ import express from "express";
 
 import authRoutes from "./routes/auth.route.js";
 
+import helmet from "helmet";
+
 import messageRoutes from "./routes/message.route.js";
 
 import cors from "cors";
@@ -31,6 +33,7 @@ app.use(cors({
   origin: process.env.CLIENT_URL || "http://localhost:5173",
   credentials: true
 }));
+app.use(helmet());
 app.use(generalLimiter);
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
