@@ -15,6 +15,9 @@ import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 
 import { errorHandler } from "./middleware/imageUploaderErrorHandler.middleware.js";
+
+import { generalLimiter } from "./middleware/ratelimiter.middleware.js";
+
 import { app, server } from "./lib/socket.js";
 
 dotenv.config();
@@ -28,6 +31,7 @@ app.use(cors({
   origin: process.env.CLIENT_URL || "http://localhost:5173",
   credentials: true
 }));
+app.use(generalLimiter);
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
 app.use(errorHandler);
