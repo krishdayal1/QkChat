@@ -86,7 +86,6 @@ export const validateUpdateProfile = (req, res, next) => {
         message: "Profile picture must be smaller than 500KB",
       });
     }
-  }
   } else if (!profilePic.startsWith("http")) {
     return res.status(400).json({
       message: "Invalid profile picture format",
