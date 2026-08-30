@@ -1,6 +1,5 @@
 import { LogOut, MessageSquare, Settings, User } from "lucide-react";
-import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useAuthStore } from "../store/useAuthStore";
 import astra from "../assets/astra.png";
 import { useAstraStore } from "../store/useAstraStore";
@@ -10,6 +9,7 @@ const Navbar = () => {
   const { logout, authUser } = useAuthStore();
   const { openAstra, isAstraOpen, closeAstra } = useAstraStore();
   const { setSelectedUser } = useChatStore();
+  const location = useLocation();
 
   return (
     <header
@@ -52,14 +52,29 @@ const Navbar = () => {
                 </button>
               </>
             )}
-            <Link to={"/settings"} className={`btn btn-sm transition-colors`}>
+            <Link to={location.pathname === "/settings" ? "/" : "/settings"}
+            onClick={() => {
+              if(location.pathname === "/settings") {
+                setSelectedUser(null);
+                closeAstra();
+              }
+            }} 
+              className="btn btn-sm transition-colors"
+            >
               <Settings className="w-4 h-4" />
               <span className="hidden sm:inline">Settings</span>
             </Link>
 
             {authUser && (
               <>
-                <Link to={"/profile"} className={`btn btn-sm gap-2`}>
+                <Link to={location.pathname === "/profile" ? "/" : "/profile"}
+                onClick={() => {
+                  if(location.pathname === "/profile") {
+                    setSelectedUser(null);
+                    closeAstra();
+                  }
+                }}
+                className="btn btn-sm gap-2">
                   <User className="size-5" />
                   <span className="hidden sm:inline">Profile</span>
                 </Link>
