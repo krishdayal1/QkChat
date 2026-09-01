@@ -19,10 +19,15 @@
 - JWT auth with protected routes, bcryptjs password hashing
 - Email verification via 6-digit OTP (5-min expiry, resend support)
 - Forgot-password / reset-password OTP flow
-
 **Real-time messaging**
-- One-to-one chat over Socket.IO with persistent history in MongoDB
-- Online/offline presence and live typing indicators
+
+- One-to-one chat over Socket.IO with persistent message history in MongoDB
+- Real-time online/offline presence
+- Live typing indicators
+- Message delivery and seen status
+- Automatic scrolling to the latest message
+- Sticky chat date indicators with Today, Yesterday, and formatted dates
+- Date header visibility changes based on scroll direction
 - Image sharing via Cloudinary
 
 **Astra — AI assistant**
@@ -31,9 +36,15 @@
 - Recent chat history sent as context; animated thinking/response states
 
 **UI/UX**
-- Responsive desktop/tablet/mobile layout, mobile-first chat behavior
-- Multiple DaisyUI themes, toast notifications, smooth animations
-- Zustand-driven global state (chat, auth, Astra)
+
+- Responsive desktop/tablet/mobile layout
+- Mobile-first chat behavior
+- Multiple DaisyUI themes
+- Toast notifications
+- Automatic chat scrolling
+- Sticky date headers while navigating chat history
+- Scroll-aware date header visibility
+- Zustand-driven global state management
 
 ---
 
@@ -200,7 +211,10 @@ npm run dev
 <summary>Full V1 testing checklist</summary>
 
 **Authentication:** signup validation, OTP send/verify/expire/resend, login/logout, forgot & reset password
-**Messaging:** load users, send/receive live messages, persistence on refresh, online/offline & typing states, image send/receive, mobile & desktop layouts
+**Messaging:** load users, send/receive live messages, persistence on refresh,
+online/offline & typing states, message delivery/seen status, image
+send/receive, automatic scroll-to-bottom, sticky date headers,
+scroll-direction behavior, mobile & desktop layouts
 **Astra:** open/close, send/receive prompts, markdown & code rendering, syntax highlighting, link handling, no duplicate panel instances
 
 </details>

@@ -39,10 +39,14 @@ export const useChatStore = create((set, get) => ({
     try {
       await axiosInstance.put(`/messages/seen/${userId}`);
 
-      set({
-        messages: get().messages.map((msg) =>
-          msg.senderId === userId ? { ...msg, seen: true } : msg,
-        ),
+      set((state) => {
+        const updatedMessages = state.messages.map((msg) =>
+          msg.senderId === userId && !msg.seen ? { ...msg, seen: true } : msg,
+        );
+
+        return {
+          messages: updatedMessages,
+        };
       });
     } catch (error) {
       toast.error(error.response.data.message);
@@ -50,13 +54,15 @@ export const useChatStore = create((set, get) => ({
   },
 
   sendMessage: async (messageData) => {
-    const { selectedUser, messages } = get();
+    const { selectedUser } = get();
     try {
       const res = await axiosInstance.post(
         `/messages/send/${selectedUser._id}`,
         messageData,
       );
-      set({ messages: [...messages, res.data] });
+      set((state) => ({
+        messages: [...state.messages, res.data],
+      }));
     } catch (error) {
       toast.error(error.response.data.message);
     }
@@ -97,9 +103,9 @@ export const useChatStore = create((set, get) => ({
     socket.off("messagesSeen");
 
     socket.on("newMessage", async (newMessage) => {
-      set({
-        messages: [...get().messages, newMessage],
-      });
+      set((state) => ({
+        messages: [...state.messages, newMessage],
+      }));
 
       const selected = get().selectedUser;
 
@@ -109,7 +115,8 @@ export const useChatStore = create((set, get) => ({
 
           set({
             messages: get().messages.map((msg) =>
-              msg.senderId === newMessage.senderId && msg.receiverId === useAuthStore.getState().authUser._id 
+              msg.senderId === newMessage.senderId &&
+              msg.receiverId === useAuthStore.getState().authUser._id
                 ? { ...msg, seen: true }
                 : msg,
             ),
