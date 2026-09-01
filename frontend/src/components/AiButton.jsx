@@ -10,7 +10,7 @@ import { X } from "lucide-react";
 import { motion } from "framer-motion";
 
 const AiButton = () => {
-  const { isAstraOpen, openAstra, closeAstra } = useAstraStore();
+  const { isAstraOpen, closeAstra } = useAstraStore();
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -75,8 +75,8 @@ const AiButton = () => {
           className="absolute top-0 bottom-0 left-0 right-0 sm:left-80 z-50 bg-base-100 overflow-hidden rounded-2xl flex flex-col shadow-2xl"
         >
           <div className="flex flex-col h-full p-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
+            <div className="flex items-center justify-between border-b border-base-300 pb-3 mb-3 shrink-0">
+              <div className="flex items-center gap-3 min-w-0">
                 <div className="relative">
                   <img
                     src={astra}
@@ -86,7 +86,7 @@ const AiButton = () => {
                   <span className="absolute bottom-1 right-0 w-3 h-3 bg-green-500 border-2 border-base-100 rounded-full"></span>
                 </div>
                 <div>
-                  <h2 className="font-bold">Astra</h2>
+                  <h2 className="font-semibold text-base">Astra</h2>
                   <p className="text-xs opacity-70">
                     Your Intelligent Companion
                   </p>
@@ -101,7 +101,7 @@ const AiButton = () => {
               </button>
             </div>
 
-            <div className="flex-1 min-h-0 overflow-y-auto space-y-2">
+            <div className="flex-1 min-h-0 overflow-y-auto space-y-3 px-1">
               {messages.map((msg, index) => (
                 <motion.div
                   key={index}

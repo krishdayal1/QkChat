@@ -38,9 +38,20 @@ export const signup = async (req, res) => {
       await existingUser.save();
       await sendEmail(
         email,
-        "Verify your email of ChatToMax",
-        `Your OTP for email verification is ${otp}. It will expire in 5 minutes.`,
-      );
+        "Verify your QkChat email address",
+`Welcome to QkChat!
+
+Your verification code is:
+
+${otp}
+
+This code will expire in 5 minutes.
+
+If you did not create a QkChat account, you can safely ignore this email.
+
+Regards,
+QkChat Support`,
+        );
 
       return res.status(200).json({
         message: "Account already exists but is not verified. New OTP sent",
@@ -59,8 +70,19 @@ export const signup = async (req, res) => {
 
     await sendEmail(
       email,
-      "Verify Your email of ChatToMax",
-      `Your OTP for email verification is ${otp}. It will expire in 5 minutes`,
+      "Verify your QkChat email address",
+`Welcome to QkChat!
+
+Your verification code is:
+
+${otp}
+
+This code will expire in 5 minutes.
+
+If you did not create a QkChat account, you can safely ignore this email.
+
+Regards,
+QkChat Support`
     );
 
     return res.status(201).json({
@@ -89,7 +111,7 @@ export const login = async (req, res) => {
 
     if (!user.isVerified) {
       return res.status(400).json({
-        message: "please verify your email first",
+        message: "Please verify your email first",
       });
     }
 
@@ -162,8 +184,7 @@ export const verifyOtp = async (req, res) => {
     if (user.otp !== otp) {
       return res.status(400).json({ message: "Invalid OTP" });
     }
-
-    if (user.otpExpiry < Date.now()) {
+    if (!user.otpExpiry || user.otpExpiry < Date.now()) {
       return res.status(400).json({ message: "OTP Expired" });
     }
 
@@ -211,8 +232,19 @@ export const resendOtp = async (req, res) => {
 
     await sendEmail(
       email,
-      "Resend Otp of ChatToMax",
-      `Your OTP for email verification is ${otp}. It will expire in 5 minutes.`,
+      "Your new QkChat verification code",
+`Hello,
+
+Here is your new QkChat verification code:
+
+${otp}
+
+This code will expire in 5 minutes.
+
+If you did not request a new verification code, you can safely ignore this email.
+
+Regards,
+QkChat Support`
     );
 
     return res.status(200).json({ message: "OTP resent successfully" });
@@ -230,7 +262,13 @@ export const forgotPassword = async (req, res) => {
 
     if (!user) {
       return res.status(400).json({
-        message: "User Not Found",
+        message: "User not found",
+      });
+    }
+
+    if (!user.isVerified) {
+      return res.status(400).json({
+        message: "Please verify your email before resetting your password",
       });
     }
 
@@ -244,7 +282,20 @@ export const forgotPassword = async (req, res) => {
     await sendEmail(
       email,
       "Reset your QkChat password",
-      `Your password reset OTP is ${otp}. It will expire in 5 minutes.`,
+`Hello,
+
+We received a request to reset your QkChat password.
+
+Your password reset code is:
+
+${otp}
+
+This code will expire in 5 minutes.
+
+If you did not request a password reset, you can safely ignore this email. Your account remains secure.
+
+Regards,
+QkChat Support`
     );
 
     res.status(200).json({
@@ -291,64 +342,64 @@ export const verifyResetOtp = async (req, res) => {
 
     res.status(500).json({
       message: "Internal server Error",
-    })
+    });
   }
 };
 
 export const resetPassword = async (req, res) => {
-    try {
-        const { email, otp, newPassword } = req.body;
+  try {
+    const { email, otp, newPassword } = req.body;
 
-        if (!email || !otp || !newPassword) {
-            return res.status(400).json({
-                message: "All fields are required",
-            });
-        }
-
-        if (newPassword.length < 6) {
-            return res.status(400).json({
-                message: "Password must be at least 6 characters",
-            });
-        }
-
-        const user = await User.findOne({ email });
-
-        if (!user) {
-            return res.status(400).json({
-                message: "User not found",
-            });
-        }
-
-        if (user.resetOtp !== otp) {
-            return res.status(400).json({
-                message: "Invalid OTP",
-            });
-        }
-
-        if (!user.resetOtpExpiry || user.resetOtpExpiry < Date.now()) {
-            return res.status(400).json({
-                message: "OTP Expired",
-            });
-        }
-
-        const hashedPassword = await bcrypt.hash(newPassword, 10);
-
-        user.password = hashedPassword;
-
-        // Invalidate the OTP after successful password reset
-        user.resetOtp = null;
-        user.resetOtpExpiry = null;
-
-        await user.save();
-
-        res.status(200).json({
-            message: "Password reset successfully",
-        });
-    } catch (error) {
-        console.error("Error in resetPassword controller", error.message);
-
-        res.status(500).json({
-            message: "Internal Server Error",
-        });
+    if (!email || !otp || !newPassword) {
+      return res.status(400).json({
+        message: "All fields are required",
+      });
     }
+
+    if (newPassword.length < 6) {
+      return res.status(400).json({
+        message: "Password must be at least 6 characters",
+      });
+    }
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(400).json({
+        message: "User not found",
+      });
+    }
+
+    if (user.resetOtp !== otp) {
+      return res.status(400).json({
+        message: "Invalid OTP",
+      });
+    }
+
+    if (!user.resetOtpExpiry || user.resetOtpExpiry < Date.now()) {
+      return res.status(400).json({
+        message: "OTP Expired",
+      });
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    user.password = hashedPassword;
+
+    // Invalidate the OTP after successful password reset
+    user.resetOtp = null;
+    user.resetOtpExpiry = null;
+
+    await user.save();
+
+    res.status(200).json({
+      message: "Password reset successfully",
+    });
+  } catch (error) {
+    console.error("Error in resetPassword controller", error.message);
+
+    res.status(500).json({
+      message: "Internal Server Error",
+    });
+  }
 };
