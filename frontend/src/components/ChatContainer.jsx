@@ -135,8 +135,10 @@ const ChatContainer = () => {
 
         if (!container) return;
 
-        // Always scroll to bottom when a new message is added
-        container.scrollTop = container.scrollHeight;
+        container.scrollTo({
+          top: container.scrollHeight,
+          behavior: "smooth",
+        });
 
         previousScrollTopRef.current = container.scrollTop;
       });
@@ -144,7 +146,22 @@ const ChatContainer = () => {
       previousMessagesLengthRef.current = messages.length;
     }
   }, [messages.length, isMessagesLoading]);
+  useEffect(() => {
+    if (!isTyping) return;
 
+    requestAnimationFrame(() => {
+      const container = messagesContainerRef.current;
+
+      if (!container) return;
+
+      container.scrollTo({
+        top: container.scrollHeight,
+        behavior: "smooth",
+      });
+
+      previousScrollTopRef.current = container.scrollHeight;
+    });
+  }, [isTyping]);
   const handleScroll = () => {
     const container = messagesContainerRef.current;
 
@@ -271,10 +288,25 @@ const ChatContainer = () => {
             </div>
           );
         })}
+        {isTyping && (
+          <div className="flex items-center gap-2 py-1 animate-in fade-in slide-in-from-bottom-2 duration-200">
+            <div className="w-6 h-6 rounded-full overflow-hidden border border-base-300">
+              <img
+                src={selectedUser.profilePic || "/avatar.png"}
+                alt={selectedUser.fullName}
+                className="w-full h-full object-cover"
+              />
+            </div>
+
+            <div className="bg-base-200 rounded-full px-3 py-1">
+              <span className="loading loading-dots loading-xs text-base-content/70" />
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Typing indicator */}
-      {isTyping && (
+      {/* {isTyping && (
         <div className="px-3 pb-1">
           <div className="flex items-center gap-2">
             <div className="w-6 h-6 rounded-full overflow-hidden border border-base-300">
@@ -290,7 +322,7 @@ const ChatContainer = () => {
             </div>
           </div>
         </div>
-      )}
+      )} */}
 
       <MessageInput />
     </div>
