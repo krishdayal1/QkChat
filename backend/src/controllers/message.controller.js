@@ -4,7 +4,6 @@ import Message from "../models/message.model.js";
 
 import cloudinary from "cloudinary";
 import { getReceiverSocketId, io } from "../lib/socket.js";
-import { send } from "process";
 
 export const getUsersForSidebar = async (req, res) => {
   try {
