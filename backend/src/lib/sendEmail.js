@@ -1,14 +1,3 @@
-import nodemailer from "nodemailer";
-
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});
-
 export const sendEmail = async (to, subject, text) => {
   const otpMatch = text.match(/\b\d{6}\b/);
   const otp = otpMatch ? otpMatch[0] : null;
@@ -185,11 +174,41 @@ export const sendEmail = async (to, subject, text) => {
     </html>
   `;
 
-  await transporter.sendMail({
-    from: `"QkChat Support" <${process.env.EMAIL_USER}>`,
-    to,
-    subject,
-    text,
-    html,
+  const response = await fetch("https://api.brevo.com/v3/smtp/email", {
+    method: "POST",
+
+    headers: {
+      "Content-Type": "application/json",
+      "api-key": process.env.BREVO_API_KEY,
+    },
+
+    body: JSON.stringify({
+      sender: {
+        name: "QkChat Support",
+        email: "qkchat.app@gmail.com",
+      },
+
+      to: [
+        {
+          email: to,
+        },
+      ],
+
+      subject,
+      textContent: text,
+      htmlContent: html,
+    }),
   });
+
+  if (!response.ok) {
+    const errorData = await response.text();
+
+    console.error("Brevo email error:", errorData);
+
+    throw new Error("Failed to send email");
+  }
+
+  const data = await response.json();
+
+  console.log("Email sent successfully through Brevo:", data.messageId);
 };
