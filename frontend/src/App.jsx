@@ -5,7 +5,6 @@ import LoginPage from "./pages/LoginPage";
 import SettingsPage from "./pages/SettingsPage";
 import ProfilePage from "./pages/ProfilePage";
 import VerifyOtpPage from "./pages/VerifyOtpPage";
-import AiButton from "./components/AiButton";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useAuthStore } from "./store/useAuthStore";
 import { useEffect } from "react";
@@ -13,7 +12,7 @@ import { Loader } from "lucide-react";
 import { Toaster } from "react-hot-toast";
 import { useThemeStore } from "./store/useThemeStore";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
-import VerifyResetOtpPage from "./pages/verifyResetOtpPage";
+import VerifyResetOtpPage from "./pages/VerifyResetOtpPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
 
 const App = () => {
