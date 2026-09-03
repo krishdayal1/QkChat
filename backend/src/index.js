@@ -26,7 +26,7 @@ dotenv.config();
 
 app.use(express.json({ limit: "5mb" }));
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 5001;
 
 app.use(cookieParser());
 app.use(cors({
@@ -40,7 +40,7 @@ app.use("/api/messages", messageRoutes);
 app.use(errorHandler);
 app.use("/api/ai", aiRoutes );
 
-server.listen(PORT, () => {
+server.listen(PORT, "0.0.0.0",() => {
   console.log("server is running on " + PORT);
   connectDB();
 });
