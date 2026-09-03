@@ -115,13 +115,14 @@ export const login = async (req, res) => {
       });
     }
 
-    generateToken(user.id, res);
+    const token = generateToken(user.id, res);
 
     res.status(200).json({
       _id: user.id,
       fullName: user.fullName,
       email: user.email,
       profilePic: user.profilePic,
+      token,
     });
   } catch (error) {
     console.error("Error in login controller", error.message);
@@ -195,7 +196,7 @@ export const verifyOtp = async (req, res) => {
 
     await user.save();
 
-    generateToken(user._id, res);
+    const token = generateToken(user._id, res);
 
     res.status(200).json({
       message: "Email Verified successfully",
@@ -204,6 +205,7 @@ export const verifyOtp = async (req, res) => {
       fullName: user.fullName,
       email: user.email,
       profilePic: user.profilePic,
+      token,
     });
   } catch (error) {
     console.error("Error in verifyOtp Controller", error.message);
