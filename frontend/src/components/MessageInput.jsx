@@ -8,6 +8,7 @@ const MessageInput = () => {
   const [imagePreview, setImagePreview] = useState(null);
   const fileInputRef = useRef(null);
   const typingTimeoutRef = useRef(null);
+  const inputRef = useRef(null);
   const { sendMessage, startTyping, stopTyping } = useChatStore();
 
   const handleImageChange = (e) => {
@@ -42,17 +43,19 @@ const MessageInput = () => {
         image: imagePreview,
       });
 
-      //clear a form
       setText("");
       setImagePreview(null);
-      if (fileInputRef.current) fileInputRef.current.value = "";
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+      inputRef.current.focus();
     } catch (error) {
       console.error("Failed to send Message:", error);
     }
   };
 
   return (
-    <div className="p-4 w-full">
+    <div className="p-4 w-full shrink-0">
       {imagePreview && (
         <div className="mb-3 flex items-center gap-2">
           <div className="relative">
@@ -73,15 +76,19 @@ const MessageInput = () => {
         </div>
       )}
 
-      <form onSubmit={handleSendMessage} className="flex items-center gap-2 w-full">
+      <form
+        onSubmit={handleSendMessage}
+        className="flex items-center gap-2 w-full"
+      >
         <div className="flex-1 flex items-center gap-2 min-w-0">
           <input
             type="text"
+            ref={inputRef}
             className="flex-1 min-w-0 w-full input input-bordered rounded-lg input-sm sm:input-md"
             placeholder="Type a message..."
             value={text}
             onChange={(e) => {
-              setText(e.target.value)
+              setText(e.target.value);
               console.log("typing emitted");
               startTyping();
 
@@ -90,8 +97,7 @@ const MessageInput = () => {
               typingTimeoutRef.current = setTimeout(() => {
                 stopTyping();
               }, 1000);
-            }
-          }
+            }}
           />
           <input
             type="file"
