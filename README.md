@@ -13,6 +13,43 @@
 
 ---
 
+## 📸 Screenshots
+
+### 🔐 Authentication
+
+#### Login
+![QkChat Login](./screenshots/loginPage.png)
+
+#### Sign Up
+![QkChat Sign Up](./screenshots/signupPage.png)
+
+#### OTP Verification
+![QkChat OTP Verification](./screenshots/verifyOtpPage.png)
+
+#### Forgot Password
+![QkChat Forgot Password](./screenshots/forgotPassPage.png)
+
+
+### 💬 Chat Application
+
+#### Home
+![QkChat Home](./screenshots/homePage.png)
+
+#### Real-Time Chat
+![QkChat Chat](./screenshots/chat.png)
+
+
+### 👤 User & AI Features
+
+#### Profile
+![QkChat Profile](./screenshots/profilePage.png)
+
+#### Settings
+![QkChat Settings](./screenshots/settingPage.png)
+
+#### Astra AI Assistant
+![Astra AI Assistant](./screenshots/astraAIPage.png)
+
 ## ✨ Features
 
 **Authentication**
