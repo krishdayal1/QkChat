@@ -241,7 +241,6 @@ npm run dev
 - 📹 **Video calling** — WebRTC peer-to-peer media with Socket.IO signaling
 - 📄 **Astra PDF upload + RAG** — extract → chunk → embed → retrieve → answer from user documents (Node.js pipeline; MongoDB Atlas Vector Search or Qdrant/Pinecone/Chroma)
 - 👥 **Group chat** — Socket.IO rooms, admins, group presence & typing
-- 💬 **Message states** — sent / delivered / seen, timestamps, unread handling
 - 🛡️ **Production hardening** — rate limiting, structured logging, tests, HTTPS/CORS, monitoring
 
 <details>
